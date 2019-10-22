@@ -2,7 +2,8 @@
 title: "plotly and flexdashboard"
 author: "Xiaoyang Li"
 date: "2019/10/21"
-output: html_document:
+output: 
+  html_document:
     toc: true
     toc_float: true
     theme: cerulean
@@ -12,7 +13,6 @@ output: html_document:
 library(tidyverse)
 library(viridis)
 library(p8105.datasets)
-install.packages("plotly")
 library(plotly)
 ```
 ```{r}
@@ -30,5 +30,34 @@ nyc_airbnb =
     room_type == "Entire home/apt",
     price %in% 100:500)  %>% 
   sample_n(5000)
+```
+
+
+scatter plot
+```{r}
+nyc_airbnb %>% 
+  plot_ly(x = ~lat, y = ~long, type = "scatter", mode = "markers", color = ~price, alpha = 0.5)
+```
+
+boxplot
+```{r}
+common_neighborhoods =
+  nyc_airbnb %>% 
+  count(neighbourhood, sort = TRUE) %>% 
+  top_n(8) %>% 
+  select(neighbourhood)
+
+nyc_airbnb %>% 
+  mutate(neighbourhood = fct_reorder(neighbourhood, price)) %>% 
+  plot_ly(y = ~price, color = ~neighbourhood, type = "box", colors = "Set2")
+```
+
+
+bar chart
+```{r}
+nyc_airbnb %>% 
+  count(neighbourhood) %>% 
+  mutate(neighbourhood = fct_reorder(neighbourhood, n)) %>% 
+  plot_ly(x = ~neighbourhood, y = ~n, color = ~neighbourhood, type = "bar")
 ```
 

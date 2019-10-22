@@ -14,11 +14,12 @@ And I can put all kinds of stuff on it!
 You can click [here](about.html) to know more about me
 
 
+
 ## add some links
 I often use [Google](https://www.google.com/) to do **data science**
 
 ## add some picture
-![](photo1.jpg)
+![](./images/photo1.jpg)
 
 
 
