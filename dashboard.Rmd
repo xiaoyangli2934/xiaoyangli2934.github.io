@@ -1,20 +1,19 @@
 ---
-title: "plotly and flexdashboard"
-author: "Xiaoyang Li"
-date: "2019/10/21"
+title: "dashboard"
 output: 
-  html_document:
-    toc: true
-    toc_float: true
-    theme: cerulean
+  flexdashboard::flex_dashboard:
+    orientation: columns
+    vertical_layout: fill
 ---
 
 ```{r setup, include=FALSE}
+library(flexdashboard)
 library(tidyverse)
 library(viridis)
 library(p8105.datasets)
 library(plotly)
 ```
+
 
 ```{r}
 set.seed(1)
@@ -34,31 +33,37 @@ nyc_airbnb =
 ```
 
 
-scatter plot
+Column {data-width=650}
+-----------------------------------------------------------------------
+
+### Chart A
+
 ```{r}
 nyc_airbnb %>% 
   plot_ly(x = ~lat, y = ~long, type = "scatter", mode = "markers", color = ~price, alpha = 0.5)
 ```
 
-boxplot
-```{r}
-common_neighborhoods =
-  nyc_airbnb %>% 
-  count(neighbourhood, sort = TRUE) %>% 
-  top_n(8) %>% 
-  select(neighbourhood)
+Column {data-width=350}
+-----------------------------------------------------------------------
 
+### Chart B
+
+```{r}
 nyc_airbnb %>% 
   mutate(neighbourhood = fct_reorder(neighbourhood, price)) %>% 
   plot_ly(y = ~price, color = ~neighbourhood, type = "box", colors = "Set2")
 ```
 
+### Chart C
 
-bar chart
 ```{r}
 nyc_airbnb %>% 
   count(neighbourhood) %>% 
   mutate(neighbourhood = fct_reorder(neighbourhood, n)) %>% 
   plot_ly(x = ~neighbourhood, y = ~n, color = ~neighbourhood, type = "bar")
+```
+
+```{r}
+rmarkdown::render("dashboard.Rmd", output_format = "flexdashboard::flex_dashboard")
 ```
 
